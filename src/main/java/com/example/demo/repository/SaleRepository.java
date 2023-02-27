@@ -8,5 +8,5 @@ import com.example.demo.models.Sale;
 
 public interface SaleRepository extends JpaRepository<Sale,Long>{
 
-	Sale findByDni(String dni);
+	Optional<Sale> findByDni(String dni);
 }

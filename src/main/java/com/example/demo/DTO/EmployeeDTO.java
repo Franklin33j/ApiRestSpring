@@ -1,11 +1,12 @@
 package com.example.demo.DTO;
 
-import java.util.Set;
+
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.example.demo.models.Role;
+
 import com.example.demo.models.Sale;
 import com.example.demo.models.User;
 
@@ -26,7 +27,7 @@ public class EmployeeDTO {
 	@Size(max = 4, min = 4 ,message = "El dni requiere unicamente 4 numeros")
 	private  Set<Role> roles;
 	*/
-	@NotEmpty(message = "El atributo id de Sale es obligatorio")
+	@NotNull(message = "El atributo id de Sale es obligatorio")
 	private Sale sale;
 	public Long getId() {
 		return id;
@@ -52,9 +53,15 @@ public class EmployeeDTO {
 	public void setSale(Sale sale) {
 		this.sale = sale;
 	}
+	
+	public void SetPasswordUser(String password)
+	{
+		this.getUser().setPassword(password);
+	}
+
 	public EmployeeDTO(Long id, @NotEmpty(message = "el atributo id de User es obligatorio") User user,
 			@NotEmpty(message = "El atributo dni es obligatorio") @Size(max = 4, min = 4, message = "El atributo dni requiere unicamente 4 numeros") String dni,
-			@NotEmpty(message = "El atributo id de Sale es obligatorio") Sale sale) {
+			@NotNull(message = "El atributo id de Sale es obligatorio") Sale sale) {
 		super();
 		this.id = id;
 		this.user = user;

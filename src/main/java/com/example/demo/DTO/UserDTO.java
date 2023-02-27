@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import com.example.demo.models.Role;
 
+
 public class UserDTO {
 
 	private Long id;

@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import com.example.demo.exceptions.ResourceDuplicatedException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.models.Sale;
 import com.example.demo.repository.SaleRepository;
+import com.example.demo.services.SaleService;
 
 @Service
 public class SaleServiceImp  implements SaleService{
@@ -61,9 +62,10 @@ public class SaleServiceImp  implements SaleService{
 	
 	private Sale SaleUpdated(Sale sale, SaleDTO saleDTO)
 	{
-		Sale saleStatus= saleRepository.findByDni(saleDTO.getDni());
+		Sale saleStatus= saleRepository.findByDni(saleDTO.getDni()).orElse(null);
 		//actualizar
 		if(saleStatus!=null)
+			
 		{
 			if(!saleStatus.getId().equals(sale.getId()))
 			{
@@ -83,10 +85,10 @@ public class SaleServiceImp  implements SaleService{
 	private Sale SaleSaved(SaleDTO saleDTO)
 	{
 		//agregar
-		Sale saleStatus= saleRepository.findByDni(saleDTO.getDni());
-		if(saleStatus !=null)
+		Sale saleStatus= saleRepository.findByDni(saleDTO.getDni()).orElse(null);
+		if(saleStatus!=null)
 		{
-			throw new ResourceDuplicatedException("dni",saleDTO.getDni());
+			throw new ResourceDuplicatedException("dni", saleDTO.getDni());
 		}
 		Sale saleCre= new Sale();
 		saleCre.setDni(saleDTO.getDni());

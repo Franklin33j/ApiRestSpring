@@ -7,8 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,10 +20,11 @@ import com.example.demo.DTO.RoleDTO;
 import com.example.demo.services.RoleService;
 
 @RestController
-@RequestMapping("/api/roles")
-
+@RequestMapping("/api/admin/roles")
+@PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
 
+	
 	@Autowired
 	RoleService roleService;
 	@GetMapping
@@ -35,12 +34,13 @@ public class RoleController {
 		String username = authentication.getName();*/
 		return ResponseEntity.ok(roleService.GetAllRoles());
 	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<RoleDTO> FindRoleById(@PathVariable (name = "id") long id)
 	{
 		return ResponseEntity.ok(roleService.FindRoleById(id));
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@PostMapping
 	public ResponseEntity<RoleDTO> AddRole(
 			@Valid @RequestBody RoleDTO role)
@@ -48,7 +48,6 @@ public class RoleController {
 		
 		return ResponseEntity.ok(roleService.AddRole(role));
 	}
-	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<RoleDTO> UpdateRole(
 			@PathVariable(name = "id")long id,
@@ -56,7 +55,7 @@ public class RoleController {
 	{
 		return ResponseEntity.ok(roleService.UpdateRole(id, role));
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<RoleDTO> DeleteRole(@PathVariable(name = "id") long id)
 	{

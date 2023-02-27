@@ -20,7 +20,8 @@ import com.example.demo.DTO.SaleDTO;
 import com.example.demo.services.SaleService;
 
 @RestController
-@RequestMapping("/api/sales")
+@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/api/admin/sales")
 public class SaleController {
 
 	@Autowired
@@ -35,14 +36,14 @@ public class SaleController {
 	{
 		return ResponseEntity.ok(saleService.FindById(id));
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@PostMapping
 	public ResponseEntity<SaleDTO> AddSale(
 			@Valid @RequestBody SaleDTO sale)
 	{
 		return ResponseEntity.ok(saleService.AddSale(sale));
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@PutMapping("/{id}")
 	public ResponseEntity<SaleDTO> UpdateSale(
 			@PathVariable(name = "id")long id,
@@ -52,7 +53,7 @@ public class SaleController {
 		return ResponseEntity.ok(saleResponse);
 		
 	}
-	@PreAuthorize("hasRole('ADMIN')")
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<SaleDTO> DeleteSale(
 			@PathVariable(name = "id")long id)

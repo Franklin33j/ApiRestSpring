@@ -5,30 +5,32 @@ import javax.validation.constraints.NotNull;
 
 public class LoginDTO {
 
-	@NotNull(message = "El campo email es obligatorio")
-	@NotEmpty(message = "El campo email es obligatorio")
-	private String email;
+	@NotNull(message = "El campo username es obligatorio")
+	@NotEmpty(message = "El campo username es obligatorio")
+	private String username;
 	@NotNull(message = "El campo password es obligatorio")
 	@NotEmpty(message = "El campo password es obligatorio")
 	private String password;
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 	public LoginDTO(
-			@NotNull(message = "El campo email es obligatorio") @NotEmpty(message = "El campo email es obligatorio") String email,
+			@NotNull(message = "El campo username es obligatorio") @NotEmpty(message = "El campo username es obligatorio") String username,
 			@NotNull(message = "El campo password es obligatorio") @NotEmpty(message = "El campo password es obligatorio") String password) {
 		super();
-		this.email = email;
+		this.username = username;
 		this.password = password;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public LoginDTO() {
 		super();

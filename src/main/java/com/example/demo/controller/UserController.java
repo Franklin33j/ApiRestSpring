@@ -20,7 +20,7 @@ import com.example.demo.DTO.UserDTO;
 import com.example.demo.services.UserService;
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("api/admin/users")
 public class UserController {
 
 	@Autowired

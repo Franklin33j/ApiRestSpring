@@ -8,9 +8,9 @@ import com.example.demo.DTO.EmployeeDTO;
 public interface EmployeeService {
 	
 	List<EmployeeDTO> GetAllEmployees();
-	EmployeeDTO FindEmployeeById(Long id);
-	EmployeeDTO AddEmployee(EmployeeDTO employee);
-	EmployeeDTO UpdateEmployee(Long id, EmployeeDTO employee);
-	EmployeeDTO DeleteEmployee(Long id);
+	EmployeeDTO FindEmployeeByDni(String dni);
+	EmployeeDTO AddEmployee(String usernameOrEmail, String dniSale);
+	EmployeeDTO UpdateEmployee(String usernameOrEmail, String dniSale, String dniEmployee);
+	EmployeeDTO DeleteEmployee(String dni);
 
 }

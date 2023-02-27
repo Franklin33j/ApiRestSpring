@@ -1,17 +1,26 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.ConstraintViolationException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.UserDTO;
+import com.example.demo.exceptions.ConstraintException;
 import com.example.demo.exceptions.ResourceDuplicatedException;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.models.Employee;
+import com.example.demo.models.Role;
 import com.example.demo.models.User;
+import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.services.UserService;
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -19,6 +28,13 @@ public class UserServiceImpl implements UserService{
 	UserRepository userRepository;
 	@Autowired
 	ModelMapper mapper;
+	@Autowired
+	RoleRepository roleRepository ;
+	@Autowired
+	EmployeeRepository employeeRepository;
+	@Autowired
+	BCryptPasswordEncoder encoder;
+	
 	@Override
 	public List<UserDTO> GetAllUsers() {
 		List<User> users= userRepository.findAll();
@@ -47,7 +63,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserDTO DeleteUser(Long id) {
 		User userExist= userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("id", Long.toString(id)));
+		try {
 		userRepository.delete(userExist);
+		}catch (Exception e) {
+			
+			throw new ConstraintException("No se puede eliminar el registro debido a que está siendo referenciado por la tabla empleados, primero elimine el empleado .");
+		}
 		return mapper.map(userExist, UserDTO.class);
 	}
 
@@ -56,7 +77,7 @@ public class UserServiceImpl implements UserService{
 		User userStatusU= userRepository.findByUsername(userDTO.getUsername());
 		User userStatusE= userRepository.findByEmail(userDTO.getEmail());
 		
-		if(userStatusU!=null)
+		if(!userStatusU.equals(null))
 		{
 			if(!user.getId().equals(userStatusU.getId()))
 			 {
@@ -83,11 +104,12 @@ public class UserServiceImpl implements UserService{
 		 }
 			
 		 user=ManuallyMapperUser(userDTO,user);
+		
 		 
 		 return userRepository.save(user);
 	}
 	
-	private User UserAdded(UserDTO userDTO)
+	private User UserAdded(UserDTO userDTO )
 	{
 		User userStatusU= userRepository.findByUsername(userDTO.getUsername());
 		User userStatusE= userRepository.findByEmail(userDTO.getEmail());
@@ -97,6 +119,7 @@ public class UserServiceImpl implements UserService{
 			 
 			 User userCre= new User();
 			 userCre= mapper.map(userDTO, User.class);
+			 userCre.setPassword(encoder.encode(userDTO.getPassword()));
 			 return userRepository.save(userCre);
 	}
 	
@@ -105,7 +128,7 @@ public class UserServiceImpl implements UserService{
 	 user.setFirstNames(userDTO.getFirstNames());
 	 user.setLastNames(userDTO.getLastNames());
 	 user.setAge(userDTO.getAge());
-	 user.setPassword(userDTO.getPassword());
+	 user.setPassword(encoder.encode(userDTO.getPassword()));
 	 user.setAddress(userDTO.getAddress());
 	 return user;
 	}

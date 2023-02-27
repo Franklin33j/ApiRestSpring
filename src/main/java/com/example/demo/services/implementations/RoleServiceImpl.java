@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.services.implementations;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +14,7 @@ import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.models.Role;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.SaleRepository;
+import com.example.demo.services.RoleService;
 
 @Service
 public class RoleServiceImpl implements RoleService {

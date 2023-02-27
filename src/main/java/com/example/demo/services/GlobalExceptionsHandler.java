@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +42,10 @@ public class GlobalExceptionsHandler  extends ResponseEntityExceptionHandler{
 		
 		return new ResponseEntity<Object>(errors, HttpStatus.CONFLICT);
 	}
+	 @ExceptionHandler(ConstraintViolationException.class)
+	    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+	        String message = "";
+	        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+	    }
 	 
 }

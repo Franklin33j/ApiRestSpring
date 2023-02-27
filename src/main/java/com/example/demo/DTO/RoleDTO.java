@@ -1,6 +1,6 @@
 package com.example.demo.DTO;
 
-import javax.persistence.Column;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

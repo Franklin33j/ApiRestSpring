@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -40,28 +41,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		/*http.csrf().disable()
+		
+		http.csrf().disable()
 		.exceptionHandling()
 		.authenticationEntryPoint(authenticationEntryPoint)
 		.and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.authorizeRequests()
-		.antMatchers(HttpMethod.GET,"/api/**").permitAll()
+		.antMatchers("/api/**").permitAll()
 		.antMatchers("/api/auth/**").permitAll()
+		.antMatchers("/swagger-ui/**").permitAll()
+		.anyRequest()
+		.authenticated();
+		
+		/*
+		 * http.csrf().disable()
+		.authorizeRequests()
+		.antMatchers("/api/**").permitAll()
+		.antMatchers("/api/auth/**").permitAll()
+		.antMatchers("/swagger-ui/**").permitAll()
 		.anyRequest()
 		.authenticated();*/
-		http.csrf().disable()
-		.authorizeRequests()
-		.antMatchers(HttpMethod.GET,"/api/**").permitAll()
-		.antMatchers("/api/auth/**").permitAll()
-		.anyRequest()
-		.authenticated()
-		.and()
-		.httpBasic();
+		
 		
 	}
-	
+	//me muestra la pagina para Swagger, ademas tengo que quitar la autenticacion para el endpoint http://localhost:8080/ por lo que agrege "/"
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		// TODO Auto-generated method stub
+		web.ignoring().antMatchers("/v2/api-docs", "/","/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**");
+		super.configure(web);
+	}
 	
 
 	@Override

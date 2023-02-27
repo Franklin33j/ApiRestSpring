@@ -1,18 +1,16 @@
 package com.example.demo.models;
 
-import java.util.Set;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -30,14 +28,10 @@ public class Employee {
 	@OneToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private User user;
-	@Column(length = 4)
+	@Column(length = 4, unique = true)
 	private String dni;
 	
-	@ManyToMany
-	@JoinTable(name = "employees_roles",
-				joinColumns = {@JoinColumn(name = "employee_id",referencedColumnName = "id")}
-			,inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-	private  Set<Role> roles;
+	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sale_id")
@@ -67,14 +61,7 @@ public class Employee {
 		this.dni = dni;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
+	
 	public Sale getSale() {
 		return sale;
 	}
@@ -83,20 +70,24 @@ public class Employee {
 		this.sale = sale;
 	}
 
-	public Employee(Long id, User user, String dni, Set<Role> roles, Sale sale) {
+	public Employee(Long id, User user, String dni) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.dni = dni;
-		this.roles = roles;
-		this.sale = sale;
+		
 	}
-
+	
 	public Employee() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
+	public User SetPasswordUser(String password)
+	{
+		this.user.setPassword(password);
+		return this.user;
+	}
 	
 	
 	
