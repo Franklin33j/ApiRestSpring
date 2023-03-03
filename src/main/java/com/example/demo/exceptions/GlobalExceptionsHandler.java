@@ -49,10 +49,15 @@ public class GlobalExceptionsHandler  extends ResponseEntityExceptionHandler{
 	    }
 	 
 	    @ExceptionHandler(IncorrectCredentialsException.class)
-	    public ResponseEntity<ErrorDetailsDTO> manejarExcepcion(IncorrectCredentialsException ex,WebRequest request) {
+	    public ResponseEntity<ErrorDetailsDTO> HandlerIncorrectCredentials(IncorrectCredentialsException ex,WebRequest request) {
 	        // crea un objeto de respuesta con el mensaje de error
 	    	ErrorDetailsDTO errors= new ErrorDetailsDTO(new Date(), ex.getMessage(), request.getDescription(false));
 			return new ResponseEntity<ErrorDetailsDTO>(errors,HttpStatus.UNAUTHORIZED);
 	    }
-	 
+	    @ExceptionHandler(JwtException.class)
+	    public ResponseEntity<ErrorDetailsDTO> HandlerJwtErrors(JwtException ex,WebRequest request) {
+	        // crea un objeto de respuesta con el mensaje de error
+	    	ErrorDetailsDTO errors= new ErrorDetailsDTO(new Date(), ex.getMessage(), request.getDescription(false));
+			return new ResponseEntity<ErrorDetailsDTO>(errors,HttpStatus.UNAUTHORIZED);
+	    }
 }

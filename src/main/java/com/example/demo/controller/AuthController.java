@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.JwtAuthResponseDTO;
 import com.example.demo.DTO.LoginDTO;
 import com.example.demo.DTO.RegisterDTO;
+import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.services.AuthService;
 
 @RestController
@@ -26,9 +28,11 @@ public class AuthController {
 	
 	@Autowired
 	AuthService authService;
+	@Autowired
+	JwtTokenProvider jwtTokenProvider;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@Valid @RequestBody LoginDTO data){
+	public ResponseEntity<JwtAuthResponseDTO> login(@Valid @RequestBody LoginDTO data){
 		
 		
 		//iniciar sesion
@@ -36,7 +40,9 @@ public class AuthController {
 	
 	SecurityContextHolder.getContext().setAuthentication(authentication);
 	
-	return ResponseEntity.ok("Sesion Iniciada con exito");
+	 String token = jwtTokenProvider.generateToken(authentication);
+	
+	return ResponseEntity.ok(new JwtAuthResponseDTO(token));
 	}
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@Valid @RequestBody RegisterDTO data)
