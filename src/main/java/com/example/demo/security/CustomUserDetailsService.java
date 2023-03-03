@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exceptions.IncorrectCredentialsException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.models.Role;
 import com.example.demo.models.User;
@@ -26,9 +27,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user= userRepository.findByUsername(username);
+		
 		if (user==null)
 		{
-			throw new ResourceNotFoundException("email", username);
+			throw new IncorrectCredentialsException();
 		}
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), GetRoles(user.getRoles()));
 	}

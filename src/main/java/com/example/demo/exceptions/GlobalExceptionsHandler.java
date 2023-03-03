@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.exceptions;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -46,6 +46,13 @@ public class GlobalExceptionsHandler  extends ResponseEntityExceptionHandler{
 	    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
 	        String message = "";
 	        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+	    }
+	 
+	    @ExceptionHandler(IncorrectCredentialsException.class)
+	    public ResponseEntity<ErrorDetailsDTO> manejarExcepcion(IncorrectCredentialsException ex,WebRequest request) {
+	        // crea un objeto de respuesta con el mensaje de error
+	    	ErrorDetailsDTO errors= new ErrorDetailsDTO(new Date(), ex.getMessage(), request.getDescription(false));
+			return new ResponseEntity<ErrorDetailsDTO>(errors,HttpStatus.UNAUTHORIZED);
 	    }
 	 
 }
